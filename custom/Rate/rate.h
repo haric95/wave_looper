@@ -3,10 +3,8 @@
 #define DSY_RATE_H
 #ifdef __cplusplus
 
-#include "phasor.h"
+#include "../../lib/DaisySP/Source/Control/phasor.h"
 
-namespace daisysp
-{
 /** Recieves a Phasor object and time scales it by a positive integer multiplier.
 
 */
@@ -18,11 +16,12 @@ class Rate
     /** Initializes the Rate module
      * Recieves two init argument of a phasor and a multiplier
     */
-    inline void Init(Phasor phasor, int multiplier)
+    inline void Init(daisysp::Phasor phasor, int multiplier)
     {
         phasor_ = phasor;
         multiplier_ = multiplier;
         bucket_ = 0;
+        prevVal_ = 0;
 
     }
 
@@ -36,10 +35,9 @@ class Rate
     void SetMultiplier(int multiplier);
 
   private:
-    Phasor phasor_;
+    daisysp::Phasor phasor_;
     int multiplier_, bucket_;
     float prevVal_;
 };
-} // namespace daisysp
 #endif
 #endif

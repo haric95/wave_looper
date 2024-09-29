@@ -15,5 +15,6 @@ float Rate::Process()
     {
         bucket_ = (bucket_ + 1) % multiplier_;
     }
+    prevVal_ = phs;
     return bucket_ + phs;
 }

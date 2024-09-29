@@ -1,37 +1,47 @@
 #include "daisy_seed.h"
 #include "globals.h"
+#include "waveLooper.h"
 
 // Use the daisy namespace to prevent having to type
 // daisy:: before all libdaisy functions
 using namespace daisy;
 
+#define BLOCK_SIZE 64
+
 // Declare a DaisySeed object called hardware
 DaisySeed hardware;
 
-int SAMPLE_RATE = 48000;
+WaveLooper looper = WaveLooper();
+
+float printed;
+
+void AudioCallback(AudioHandle::InputBuffer in, AudioHandle::OutputBuffer out, size_t size) {
+    printed = looper.Process();
+}
 
 int main(void)
-{
-    // Declare a variable to store the state we want to set for the LED.
-    bool led_state;
-    led_state = true;
-
+{    
     // Configure and Initialize the Daisy Seed
     // These are separate to allow reconfiguration of any of the internal
     // components before initialization.
-    hardware.Configure();
+    
     hardware.Init();
+    hardware.SetLed(true);
+    hardware.SetAudioBlockSize(BLOCK_SIZE); // number of samples handled per callback
+	hardware.SetAudioSampleRate(SaiHandle::Config::SampleRate::SAI_48KHZ);
+    hardware.StartLog(false);
+
+    looper.Init(60);
+
+	hardware.StartAudio(AudioCallback);
 
     // Loop forever
-    for(;;)
-    {
-        // Set the onboard LED
-        hardware.SetLed(led_state);
-
-        // Toggle the LED state for the next time around.
-        led_state = !led_state;
-
-        // Wait 500ms
-        System::Delay(1000);
+    while (1) {
+        if (printed < 0.1) {
+            hardware.Print("Bad");
+        } else {
+            hardware.Print("Good");
+        }
     }
 }
+

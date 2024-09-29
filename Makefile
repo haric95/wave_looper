@@ -3,6 +3,7 @@ TARGET = wave_looper
 
 # Sources
 CPP_SOURCES = ./src/main.cpp 
+CPP_SOURCES += ./src/waveLooper.cpp
 
 # Library Locations
 LIBDAISY_DIR = ./lib/libDaisy
