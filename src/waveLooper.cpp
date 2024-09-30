@@ -1,8 +1,10 @@
+#include "daisy_seed.h"
 #include "waveLooper.h"
 #include "globals.h"
 
 void WaveLooper::Init(int bpm)
 {
+    bpm_ = bpm;
     channels_[0].bars = 4;
     channels_[1].bars = 4;
     channels_[2].bars = 4;
@@ -15,12 +17,17 @@ void WaveLooper::Init(int bpm)
     channels_[1].playhead.Init(masterClock_, channels_[1].bars * channels_[1].beats);
     channels_[2].playhead.Init(masterClock_, channels_[2].bars * channels_[2].beats);
     channels_[3].playhead.Init(masterClock_, channels_[3].bars * channels_[3].beats);
+    channels_[0].buffer = channel1Buffer;
+    channels_[1].buffer = channel2Buffer;
+    channels_[2].buffer = channel3Buffer;
+    channels_[3].buffer = channel4Buffer;
     masterClock_.Init(constants::SAMPLE_RATE, bpm / 60);
     prev_ = 0;
 }
 
-float WaveLooper::Process() {
-    return masterClock_.Process();
+void WaveLooper::Process() {
+    float cycle = masterClock_.Process();
+    litLed_ = cycle <= 0.1;
 }
 
 int WaveLooper::GetBars(int channel) {
@@ -39,10 +46,10 @@ void WaveLooper::SetBeats(int channel, int beats) {
     channels_[channel].beats = beats;
 }
 
-bool WaveLooper::Test() {
-    float a = masterClock_.Process();
-    bool newCycle = a < prev_;
-    prev_ = a;
-    return newCycle;
+void WaveLooper::SetBPM(int bpm) {
+    bpm_ = std::min(std::max(constants::MIN_BPM, bpm), constants::MAX_BPM); 
 }
 
+float WaveLooper::Test() {
+    return *(channels_[0].buffer);
+}

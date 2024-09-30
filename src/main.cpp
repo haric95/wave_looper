@@ -13,12 +13,15 @@ DaisySeed hardware;
 
 WaveLooper looper = WaveLooper();
 
-float printed;
+float test;
 
+// DSP in here.
 void AudioCallback(AudioHandle::InputBuffer in, AudioHandle::OutputBuffer out, size_t size) {
-    printed = looper.Process();
+    looper.Process();
+    test = looper.Test();
 }
 
+// Side effects in here
 int main(void)
 {    
     // Configure and Initialize the Daisy Seed
@@ -31,17 +34,12 @@ int main(void)
 	hardware.SetAudioSampleRate(SaiHandle::Config::SampleRate::SAI_48KHZ);
     hardware.StartLog(false);
 
-    looper.Init(60);
+    looper.Init(120);
 
 	hardware.StartAudio(AudioCallback);
 
     // Loop forever
     while (1) {
-        if (printed < 0.1) {
-            hardware.Print("Bad");
-        } else {
-            hardware.Print("Good");
-        }
+
     }
 }
-

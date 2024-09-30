@@ -8,12 +8,18 @@
 #include "../custom/Rate/rate.h"
 #include "globals.h"
 
+float DSY_SDRAM_BSS channel1Buffer[constants::CHANNEL_LENGTH_S * constants::SAMPLE_RATE];
+float DSY_SDRAM_BSS channel2Buffer[constants::CHANNEL_LENGTH_S * constants::SAMPLE_RATE];
+float DSY_SDRAM_BSS channel3Buffer[constants::CHANNEL_LENGTH_S * constants::SAMPLE_RATE];
+float DSY_SDRAM_BSS channel4Buffer[constants::CHANNEL_LENGTH_S * constants::SAMPLE_RATE];
+
 struct Channel {
   int bars;
   int beats;
+  int loopEnd;
+  float *buffer;
   Rate playhead;
 };
-
 
 
 /** Main Wave Looper Class
@@ -28,15 +34,18 @@ class WaveLooper
      * 
     */
     void Init(int bpm);
-    float Process();
+    void Process();
     int GetBars(int channel);
     int GetBeats(int channel);
     void SetBeats(int channel, int beats);
     void SetBars(int channel, int bars);
-    bool Test();
+    void SetBPM(int bpm);
+    bool GetLedStatus();
+    float Test();
 
   private:
     int bpm_;
+    bool litLed_;
     float prev_;
     daisysp::Phasor masterClock_;
     Channel channels_[4];
