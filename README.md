@@ -6,7 +6,7 @@ Hari
 
 ## Description
 
-Custom looper pedal - more info soon
+Custom looper pedal based on Daisy Seed hardware - more info soon
 
 Forked from:
 
