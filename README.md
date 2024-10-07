@@ -1,11 +1,13 @@
-# Blink
+# TIDAL LOOPER PEDAL
 
 ## Author
 
-Shensley
+Hari
 
 ## Description
 
-Blinks the Seed's onboard LED at a constant rate.
+Custom looper pedal - more info soon
+
+Forked from:
 
 [Source Code](https://github.com/electro-smith/DaisyExamples/tree/master/seed/Blink)
